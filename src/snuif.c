@@ -1,21 +1,15 @@
 #include "log.h"
-#include <arpa/inet.h>
 #include <errno.h>
-#include <net/ethernet.h>
-#include <net/if.h>
 #include <netinet/if_ether.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/ioctl.h>
-#include <sys/socket.h>
 #include <unistd.h>
 
 #define BUFLEN 512
 
 int main(int argc, char *argv[]) {
   if (argc > 1)
-    outfile = fopen(argv[1], "wba");
+    outfile = fopen(argv[1], "a");
   else
     outfile = stdout;
 
