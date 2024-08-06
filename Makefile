@@ -1,24 +1,18 @@
 NAME = snuif
-CC = gcc
+CC = tcc
 
-CFLAGS = -g -Wall -Wextra -Iinc $(shell pkg-config --cflags libpcap)
-LDFLAGS = -L/usr/lib $(shell pkg-config --libs libpcap)
+CFLAGS = -g -Wall -Wextra -Iinc
+LDFLAGS = -L/usr/lib
 
 SRC = $(wildcard src/*.c)
-OBJ = $(SRC:.c=.o)
 
 .PHONY: clean test all
 
-all: clean proj
+all: build
 
-%.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
-
-proj: $(OBJ)
+build:
 	$(shell mkdir -p bin)
-	$(CC) -o bin/$(NAME) $(OBJ) $(CFLAGS) $(LDFLAGS)
+	$(CC) -o bin/$(NAME) $(CFLAGS) $(LDFLAGS) $(SRC)
 
 clean:
-	rm -f $(OBJ)
-
-
+	rm -f bin/$(NAME)
