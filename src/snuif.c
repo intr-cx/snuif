@@ -29,7 +29,6 @@ int main(int argc, char *argv[]) {
     if ((bufsize = recvfrom(sockfd, buf.data, BUFLEN, 0, &addr,
                             (socklen_t *)&addrs)) < 0) {
       fprintf(stderr, "Couldn't receive from address: %s\n", strerror(errno));
-      free(buf.data);
       break;
     }
 
