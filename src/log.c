@@ -32,18 +32,15 @@ void logIpHeader(struct ip *hdr) {
 
   memset(&src, 0, sizeof(src));
   src.sin_addr = hdr->ip_src;
-  char srca[16] = {0};
-  strcpy(srca, inet_ntoa(src.sin_addr));
 
   memset(&dst, 0, sizeof(dst));
   dst.sin_addr = hdr->ip_dst;
-  char dsta[16] = {0};
-  strcpy(dsta, inet_ntoa(dst.sin_addr));
 
   struct protoent *pName = getprotobynumber(hdr->ip_p);
 
-  fprintf(outfile, "%5s%16s →%16s ", pName == NULL ? (char *)&hdr->ip_p : pName->p_name,
-         srca, dsta);
+  fprintf(outfile, "%5s", pName == NULL ? (char *)&hdr->ip_p : pName->p_name);
+  fprintf(outfile, "%16s →", inet_ntoa(src.sin_addr));
+  fprintf(outfile, "%16s ", inet_ntoa(dst.sin_addr));
 }
 
 void logUdp(s_buffer *buf) {
