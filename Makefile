@@ -1,3 +1,4 @@
+NAME = snuif
 CC = gcc
 
 CFLAGS = -g -Wall -Wextra -Iinc $(shell pkg-config --cflags libpcap)
@@ -8,14 +9,14 @@ OBJ = $(SRC:.c=.o)
 
 .PHONY: clean test all
 
-all: proj clean
+all: clean proj
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 proj: $(OBJ)
 	$(shell mkdir -p bin)
-	$(CC) -o bin/snuif $(OBJ) $(CFLAGS) $(LDFLAGS)
+	$(CC) -o bin/$(NAME) $(OBJ) $(CFLAGS) $(LDFLAGS)
 
 clean:
 	rm -f $(OBJ)
