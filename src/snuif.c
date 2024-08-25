@@ -44,8 +44,6 @@ int main(int argc, char *argv[]) {
     recvPacket(&buf);
   }
 
-	/* req.ifr_ifru.ifru_flags ^= IFF_PROMISC; */
-	/* ioctl(sockfd, SIOCSIFFLAGS, &req); */
   close(sockfd);
   free(buf.data);
 
