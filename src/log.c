@@ -27,7 +27,7 @@ void recvPacket(s_buffer *buf) {
     logUdp(buf);
     break;
   }
-  printf("\n");
+  fprintf(outfile, "\n");
 }
 
 void logIpHeader(struct ip *hdr) {
@@ -45,7 +45,7 @@ void logIpHeader(struct ip *hdr) {
 
   struct protoent *pName = getprotobynumber(hdr->ip_p);
 
-  printf("%5s%16s →%16s ", pName == NULL ? (char *)&hdr->ip_p : pName->p_name,
+  fprintf(outfile, "%5s%16s →%16s ", pName == NULL ? (char *)&hdr->ip_p : pName->p_name,
          srca, dsta);
 }
 
@@ -57,7 +57,7 @@ void logUdp(s_buffer *buf) {
       (struct udphdr *)(buf->data + sizeof(struct ethhdr) + udpLen);
   uint hdrLen = sizeof(struct ethhdr) + udpLen + sizeof(udp);
 
-  printf("%6d →%6d %04x ", ntohs(udp->uh_sport), ntohs(udp->uh_dport),
+  fprintf(outfile, "%6d →%6d %04x ", ntohs(udp->uh_sport), ntohs(udp->uh_dport),
          ntohs(udp->uh_sum));
 
   logData(buf, hdrLen);
@@ -71,7 +71,7 @@ void logTcp(s_buffer *buf) {
       (struct tcphdr *)(buf->data + sizeof(struct ethhdr) + tcpLen);
   uint hdrLen = sizeof(struct ethhdr) + tcpLen + sizeof(tcp);
 
-  printf("%6d →%6d %04x ", ntohs(tcp->th_sport), ntohs(tcp->th_dport),
+  fprintf(outfile, "%6d →%6d %04x ", ntohs(tcp->th_sport), ntohs(tcp->th_dport),
          ntohs(tcp->th_sum));
 
   logData(buf, hdrLen);
@@ -87,31 +87,31 @@ void logIcmp(s_buffer *buf) {
 
   switch (icmp->type) {
   case 11:
-    printf("%16s", "ttl expired");
+    fprintf(outfile, "%16s", "ttl expired");
     break;
   case ICMP_ECHO:
-    printf("%16s", "echo");
+    fprintf(outfile, "%16s", "echo");
     break;
   case ICMP_ECHOREPLY:
-    printf("%16s", "echo reply");
+    fprintf(outfile, "%16s", "echo reply");
     break;
   case ICMP_REDIRECT:
-    printf("%16s", "redirect");
+    fprintf(outfile, "%16s", "redirect");
     break;
   default:
-    printf("%3d", (uint)icmp->type);
+    fprintf(outfile, "%3d", (uint)icmp->type);
   }
-  printf("%3d %04x ", (uint)icmp->code, icmp->checksum);
+  fprintf(outfile, "%3d %04x ", (uint)icmp->code, icmp->checksum);
 
   logData(buf, hdrLen);
 }
 
 void logData(s_buffer *buf, uint hdrLen) {
-  printf("  ");
+  fprintf(outfile, "  ");
   for (uint i = hdrLen; i < buf->len - hdrLen; i++) {
     if (buf->data[i] >= 32 && buf->data[i] <= 128)
-      printf("%c", (uint8_t)buf->data[i]);
+      fprintf(outfile, "%c", (uint8_t)buf->data[i]);
     else
-      printf(".");
+      fprintf(outfile, ".");
   }
 }
