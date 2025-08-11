@@ -2,7 +2,7 @@ NAME = snuif
 CC = tcc
 
 CFLAGS = -g -Wall -Wextra -Iinc
-LDFLAGS = -L/usr/lib
+LDFLAGS = -L/lib64
 
 SRC = $(wildcard src/*.c)
 
